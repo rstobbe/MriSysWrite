@@ -38,9 +38,14 @@ end
 id = id{1};
 sfov = num2str(IMP.impPROJdgn.fov,'%3.0f');
 
+test = 0;
 if isfield(IMP,'ORNT')
-    ORNT = IMP.ORNT;
-elseif isfield(IMP.GWFM,'ORNT')
+    if isfield(IMP.ORNT,'dimx')
+        ORNT = IMP.ORNT;
+        test = 1;
+    end
+end
+if test == 0
     ORNT = IMP.GWFM.ORNT;
 end
 dimx = round(ORNT.dimx*1000)/1000;

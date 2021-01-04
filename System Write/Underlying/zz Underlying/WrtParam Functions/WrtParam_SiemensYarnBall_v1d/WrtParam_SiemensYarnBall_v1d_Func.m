@@ -55,11 +55,7 @@ end
 
 if strcmp(IMP.DES.SPIN.type,'Uniform') || strcmp(IMP.DES.SPIN.type,'Worsted')
     sspin = num2str(10,'%2.0f');
-elseif strcmp(IMP.DES.SPIN.type,'UnderKaiser')
-    sspin = num2str(20,'%2.0f');
-elseif strcmp(IMP.DES.SPIN.type,'UnderSamp')
-    sspin = num2str(20,'%2.0f');
-elseif strcmp(IMP.DES.SPIN.type,'KaiserShaped')
+elseif strcmp(IMP.DES.SPIN.type,'LinearDecrease')
     sspin = num2str(20,'%2.0f');
 end
 
@@ -85,6 +81,11 @@ selip = num2str(100*IMP.impPROJdgn.elip,'%3.0f');
 stro = num2str(10*IMP.impPROJdgn.tro,'%3.0f');
 snproj = num2str(sz(1),'%4.0f');
 sp = num2str(1000*IMP.impPROJdgn.p,'%4.0f');
+%---
+if not(isfield(IMP.DES.SPIN,'number'))                              % testing hack - delete
+    IMP.DES.SPIN.number = IMP.DES.SPIN.number2;
+end
+%---
 susamp = num2str(IMP.DES.SPIN.number,'%4.0f');
 nusamp = num2str(str2double(IMP.DES.SPIN.number)/100,'%4.2f');
 

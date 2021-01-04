@@ -9,7 +9,7 @@ if strcmp(filesep,'\')
     trajorderpath = [SCRPTPATHS.pioneerloc,'System Write\Underlying\Selectable Functions\TrajOrder Functions\'];
 elseif strcmp(filesep,'/')
 end
-wrtsysfunc = 'WrtSys_SiemensYarnBall_v2e';
+wrtsysfunc = 'WrtSys_SiemensGeneric_v1c';
 trajorderfunc = 'TrajOrder_AsImplementation_v1a';
 
 m = 1;
