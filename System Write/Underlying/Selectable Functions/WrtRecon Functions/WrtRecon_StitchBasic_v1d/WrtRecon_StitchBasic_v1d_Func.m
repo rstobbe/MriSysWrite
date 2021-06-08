@@ -2,7 +2,7 @@
 %
 %=========================================================
 
-function [RECONWRT,err] = WrtRecon_StitchBasic_v1c_Func(RECONWRT,INPUT)
+function [RECONWRT,err] = WrtRecon_StitchBasic_v1d_Func(RECONWRT,INPUT)
 
 Status2('busy','Build Recon File',2);
 Status2('done','',3);
@@ -51,7 +51,10 @@ end
 SDC = single(SDC(TORD.projsampscnr,:,:));
 SDC = permute(SDC,[2 1 3]);
 
-WRT.ReconInfoMat = cat(3,Kmat,SDC);
+ReconInfoMat0 = cat(3,Kmat,SDC);
+FirstTraj = ReconInfoMat0(:,1,:);
+DumTraj = repmat(FirstTraj,1,WRT.Dummies,1);
+WRT.ReconInfoMat = cat(2,DumTraj,ReconInfoMat0);
 
 %--------------------------------------------
 % Panel

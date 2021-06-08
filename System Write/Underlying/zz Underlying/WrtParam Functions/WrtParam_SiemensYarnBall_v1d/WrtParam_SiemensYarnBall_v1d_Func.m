@@ -75,6 +75,11 @@ if isempty(id)
     return
 end
 id = id{1};
+if strcmp(id,'0')
+    err.flag = 1;
+    err.msg = 'ID cannot be zero';
+    return
+end
 sfov = num2str(IMP.impPROJdgn.fov,'%3.0f');
 svox = num2str(10*(IMP.impPROJdgn.vox^3)/IMP.impPROJdgn.elip,'%3.0f');
 selip = num2str(100*IMP.impPROJdgn.elip,'%3.0f');

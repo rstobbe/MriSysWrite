@@ -2,7 +2,7 @@
 %
 %=========================================================
 
-function [SYSWRT,err] = WrtSys_SiemensGeneric_v1c_Func(SYSWRT,INPUT)
+function [SYSWRT,err] = WrtSys_SiemensGeneric_v1d_Func(SYSWRT,INPUT)
 
 Status2('busy','Write Trajectories for Siemens',2);
 Status2('done','',3);
