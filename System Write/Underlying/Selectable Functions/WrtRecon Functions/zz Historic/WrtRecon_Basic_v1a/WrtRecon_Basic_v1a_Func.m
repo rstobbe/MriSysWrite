@@ -42,7 +42,9 @@ WRT.SDC = SDC;
 WRT.SDCname = SDCS.name;
 WRT.dummies = WRTSYS.dummies;
 WRT.projsampscnr = TORD.projsampscnr;
-WRT = rmfield(WRT,{'qTscnr','G','Kend'});
+if isfield(WRT,'qTscnr')
+    WRT = rmfield(WRT,{'qTscnr','G','Kend'});
+end
 WRT.TORD = TORD;
 WRT.OverProj = 'No';
 
