@@ -36,10 +36,13 @@ function err = WriteRecon(RECON,WRTMETH,IMP)
         STCH.SetDummies(WRTMETH.Dummies);
         STCH.SetNumTraj(length(TORD.ScnrImpProjArr));
         STCH.SetNumCol(KINFO.SamplingPts);
-        STCH.SetSampStart(KINFO.SamplingStart);
+        STCH.SetSampStart(KINFO.SamplingPtStart);
+        STCH.SetSampStartTime(KINFO.SamplingStartTimeOnTrajectory);
+        STCH.SetSamplingTimeOnTrajectory(KINFO.SamplingTimeOnTrajectory);
         STCH.SetSampEnd(STCH.SampStart+STCH.NumCol-1);
         STCH.SetFov(KINFO.fov);
         STCH.SetVox(KINFO.vox);
+        STCH.SetSamplingPtAtCentre(KINFO.SamplingPtAtCentre);
 
         ReconInfoMat = cat(3,KINFO.kSpace,KINFO.SampDensComp);
         ReconInfoMat = single(ReconInfoMat(TORD.ReconProjArr,:,:));
