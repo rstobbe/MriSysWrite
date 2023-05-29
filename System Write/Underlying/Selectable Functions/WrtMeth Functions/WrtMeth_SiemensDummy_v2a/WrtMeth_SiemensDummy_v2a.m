@@ -3,10 +3,10 @@
 %   
 %==================================================================
 
-classdef WrtMeth_SiemensYarnball_v2a < handle
+classdef WrtMeth_SiemensDummy_v2a < handle
 
 properties (SetAccess = private)                   
-    Method = 'WrtMeth_SiemensYarnball_v2a'
+    Method = 'WrtMeth_SiemensDummy_v2a'
     TrajOrderfunc
     TORD
     WRTGRAD
@@ -32,7 +32,7 @@ methods
 %==================================================================
 % Constructor
 %==================================================================  
-function [WRTMETH,err] = WrtMeth_SiemensYarnball_v2a(WRTMETHipt)    
+function [WRTMETH,err] = WrtMeth_SiemensDummy_v2a(WRTMETHipt)    
     err.flag = 0;
     numfiles = str2double(WRTMETHipt.('NumAcqs').EntryStr);
     for n = 1:numfiles
@@ -102,7 +102,9 @@ function err = Write(WRTMETH,IMPMETH)
         return
     end    
     
-    Grads = IMPMETH.GRAD.Grads(WRTMETH.TORD.ScnrImpProjArr,:,:);
+    Grads0 = IMPMETH.GRAD.Grads;
+    Grads = zeros(size(Grads0));
+    
     %---------------------------------------------
     % Add Dummies
     %---------------------------------------------

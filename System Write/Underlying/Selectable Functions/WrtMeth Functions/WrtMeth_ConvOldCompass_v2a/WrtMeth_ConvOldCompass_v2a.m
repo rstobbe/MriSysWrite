@@ -61,9 +61,10 @@ function err = Write(WRTMETH,PREV)
     
     ReconInfoMat0 = single(cat(3,Kmat,PREV.SDC));
     ReconInfoMat0 = permute(ReconInfoMat0,[2 1 3]);
-    FirstTraj = ReconInfoMat0(:,1,:);
-    DumTraj = repmat(FirstTraj,1,PREV.dummies,1);
-    ReconInfoMat = cat(2,DumTraj,ReconInfoMat0);
+%     FirstTraj = ReconInfoMat0(:,1,:);
+%     DumTraj = repmat(FirstTraj,1,PREV.dummies,1);
+%     ReconInfoMat = cat(2,DumTraj,ReconInfoMat0);
+    ReconInfoMat = ReconInfoMat0;
     WRTMETH.STCH{1}.SetReconInfoMat(ReconInfoMat);   
 
     %---------------------------------------------

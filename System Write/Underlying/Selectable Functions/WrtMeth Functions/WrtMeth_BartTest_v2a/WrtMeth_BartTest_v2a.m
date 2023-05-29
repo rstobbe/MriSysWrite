@@ -3,13 +3,12 @@
 %   
 %==================================================================
 
-classdef WrtMeth_SiemensYarnball_v2a < handle
+classdef WrtMeth_BartTest_v2a < handle
 
 properties (SetAccess = private)                   
-    Method = 'WrtMeth_SiemensYarnball_v2a'
+    Method = 'WrtMeth_BartTest_v2a'
     TrajOrderfunc
     TORD
-    WRTGRAD
     WRTPARAM
     WRTRECON
     STCH
@@ -32,7 +31,7 @@ methods
 %==================================================================
 % Constructor
 %==================================================================  
-function [WRTMETH,err] = WrtMeth_SiemensYarnball_v2a(WRTMETHipt)    
+function [WRTMETH,err] = WrtMeth_BartTest_v2a(WRTMETHipt)    
     err.flag = 0;
     numfiles = str2double(WRTMETHipt.('NumAcqs').EntryStr);
     for n = 1:numfiles
@@ -73,10 +72,8 @@ function [WRTMETH,err] = WrtMeth_SiemensYarnball_v2a(WRTMETHipt)
     WRTMETH.Dummies = str2double(WRTMETHipt.('Dummies'));
     func = str2func('WrtParam_SiemensYarnBall_v2a');           
     WRTMETH.WRTPARAM = func('');   
-    func = str2func('WrtRecon_StitchBasic_v2a');           
+    func = str2func('WrtRecon_Bart_v2a');           
     WRTMETH.WRTRECON = func('');
-    func = str2func('WrtGrad_Siemens_v2a');           
-    WRTMETH.WRTGRAD = func(''); 
     WRTMETH.TrajOrderfunc = WRTMETHipt.('TrajOrderfunc').Func; 
     TORDipt = WRTMETHipt.('TrajOrderfunc');
     CallingFunction = WRTMETHipt.Struct.labelstr;
@@ -93,7 +90,7 @@ end
 % Write
 %================================================================== 
 function err = Write(WRTMETH,IMPMETH)
-
+  
     %---------------------------------------------
     % Order Trajectories
     %---------------------------------------------
@@ -101,16 +98,7 @@ function err = Write(WRTMETH,IMPMETH)
     if err.flag
         return
     end    
-    
-    Grads = IMPMETH.GRAD.Grads(WRTMETH.TORD.ScnrImpProjArr,:,:);
-    %---------------------------------------------
-    % Add Dummies
-    %---------------------------------------------
-    if WRTMETH.Dummies > 0
-        GradDums = repmat(Grads(1,:,:),[WRTMETH.Dummies,1,1]);
-        Grads = cat(1,GradDums,Grads);
-    end    
-    WRTMETH.TotalTrajNum = length(Grads(:,1,1));
+    WRTMETH.TotalTrajNum = length(IMPMETH.GRAD.Grads(:,1,1)) + WRTMETH.Dummies;
 
     %---------------------------------------------
     % Name Waveform
@@ -118,21 +106,8 @@ function err = Write(WRTMETH,IMPMETH)
     err = WRTMETH.WRTPARAM.NameWaveform(WRTMETH,IMPMETH);
     if err.flag
         return
-    end    
+    end
     WRTMETH.name = WRTMETH.WRTPARAM.name;
-    
-    %---------------------------------------------
-    % Write Params
-    %---------------------------------------------
-    err = WRTMETH.WRTPARAM.WriteParams(WRTMETH,IMPMETH);
-    if err.flag
-        return
-    end    
-
-    %---------------------------------------------
-    % Write Grads
-    %---------------------------------------------
-    WRTMETH.WRTGRAD.WriteGrads(WRTMETH,IMPMETH,Grads);
 
     %---------------------------------------------
     % Write Recon
@@ -141,7 +116,7 @@ function err = Write(WRTMETH,IMPMETH)
     if err.flag
         return
     end      
-    WRTMETH.KINFO = [];    
+    WRTMETH.KINFO = [];
     
     %---------------------------------------------
     % Return
@@ -150,7 +125,7 @@ function err = Write(WRTMETH,IMPMETH)
     Panel0(2,:) = {'Name',WRTMETH.WRTPARAM.name,'Output'};
     Panel0(3,:) = {'','','Output'};
     Panel0(4,:) = {'IMP',IMPMETH.name,'Output'};
-    WRTMETH.Panel = [Panel0;WRTMETH.WRTPARAM.Panel;WRTMETH.WRTGRAD.Panel;WRTMETH.WRTRECON.Panel]; 
+    WRTMETH.Panel = [Panel0;WRTMETH.WRTRECON.Panel]; 
     WRTMETH.PanelOutput = cell2struct(WRTMETH.Panel,{'label','value','type'},2);
     WRTMETH.ExpDisp = PanelStruct2Text(WRTMETH.PanelOutput);
 

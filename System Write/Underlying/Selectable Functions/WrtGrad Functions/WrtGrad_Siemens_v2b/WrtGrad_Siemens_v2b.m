@@ -1,14 +1,16 @@
 %==================================================================
 % (v2a)
-%   
+%       - IMPMETH dropped.  Do gmax check elsewhere.
+%       - WRTPARAM as input. 
 %==================================================================
 
-classdef WrtGrad_Siemens_v2a < handle
+classdef WrtGrad_Siemens_v2b < handle
 
 properties (SetAccess = private)                   
-    Method = 'WrtGrad_Siemens_v2a'
+    Method = 'WrtGrad_Siemens_v2b'
     WRTGRADipt
     Panel
+    gmax
 end
 
 methods 
@@ -16,7 +18,13 @@ methods
 %==================================================================
 % Constructor
 %==================================================================  
-function [WRTGRAD,err] = WrtGrad_Siemens_v2a(WRTGRADipt)    
+function WRTGRAD = WrtGrad_Siemens_v2b()     
+end
+
+%==================================================================
+% InitViaCompass
+%==================================================================  
+function [WRTGRAD,err] = InitViaCompass(WRTGRAD,WRTGRADipt)    
     err.flag = 0;
     WRTGRAD.WRTGRADipt = WRTGRADipt;     
 end
@@ -24,22 +32,15 @@ end
 %==================================================================
 % WriteGrads
 %==================================================================  
-function err = WriteGrads(WRTGRAD,WRTMETH,IMPMETH,Grads)    
+function err = WriteGrads(WRTGRAD,WRTPARAM,Grads)    
     err.flag = 0;
-    WRTPARAM = WRTMETH.WRTPARAM;
-    GRAD = IMPMETH.GRAD;
     file = [WRTPARAM.path,WRTPARAM.file];
 
     %-------------------------------------------------
     % Normalize
     %-------------------------------------------------
-    if GRAD.GetMaxAbsGrad == max(abs(Grads(:)))
-        Grads = Grads/max(abs(Grads(:)));
-    elseif max(abs(Grads(:))) == 0                         % dummy writing
-        %Grads = Grads;
-    else
-        error('fix');
-    end
+    Grads = Grads/max(abs(Grads(:)));
+    WRTGRAD.gmax = max(abs(Grads(:)));
     
     %-------------------------------------------------
     % Write Gradients to File

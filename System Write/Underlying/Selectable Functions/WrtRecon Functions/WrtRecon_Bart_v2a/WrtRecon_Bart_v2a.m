@@ -1,12 +1,12 @@
 %==================================================================
 % (v2a)
-%   - Convert to Object
+%   - 
 %==================================================================
 
-classdef WrtRecon_StitchBasic_v2a < handle
+classdef WrtRecon_Bart_v2a < handle
 
 properties (SetAccess = private)                   
-    Method = 'WrtRecon_StitchBasic_v2a'
+    Method = 'WrtRecon_Bart_v2a'
     Panel = cell(0)
 end
 
@@ -15,7 +15,7 @@ methods
 %==================================================================
 % Constructor
 %==================================================================  
-function [RECON,err] = WrtRecon_StitchBasic_v2a(RECONipt)     
+function [RECON,err] = WrtRecon_Bart_v2a(RECONipt)     
     err.flag = 0;          
 end
 
@@ -45,20 +45,21 @@ function err = WriteRecon(RECON,WRTMETH,IMP)
         STCH.SetSamplingPtAtCentre(KINFO.SamplingPtAtCentre);
 
         %---
-        kSpaceRot = zeros(size(KINFO.kSpace));                          % avoid rotation in Stitch (I think)
+        kSpaceRot = zeros(size(KINFO.kSpace));                          
         kSpaceRot(:,:,1) = KINFO.kSpace(:,:,2);
         kSpaceRot(:,:,2) = KINFO.kSpace(:,:,1);
         kSpaceRot(:,:,3) = KINFO.kSpace(:,:,3);
         %---
-        ReconInfoMat = cat(3,kSpaceRot,KINFO.SampDensComp);
-        ReconInfoMat = single(ReconInfoMat(TORD.ReconProjArr,:,:));
-        ReconInfoMat = permute(ReconInfoMat,[2 1 3]);    
+        kSpaceRot = cat(3,kSpaceRot,KINFO.SampDensComp);                   
+        ReconInfoMat = single(kSpaceRot(TORD.ReconProjArr,:,:));
+        ReconInfoMat = permute(ReconInfoMat,[3 2 1]);   
+        ReconInfoMat = ReconInfoMat/KINFO.kstep;                                % Bart units
 %         FirstTraj = ReconInfoMat(:,1,:);
 %         DumTraj = repmat(FirstTraj,1,WRTMETH.Dummies,1);
 %         ReconInfoMat = cat(2,DumTraj,ReconInfoMat); 
         STCH.SetReconInfoMat(ReconInfoMat);
 
-        kRad = sqrt(ReconInfoMat(:,:,1).^2 + ReconInfoMat(:,:,2).^2 + ReconInfoMat(:,:,3).^2);
+        kRad = sqrt(ReconInfoMat(1,:,:).^2 + ReconInfoMat(2,:,:).^2 + ReconInfoMat(3,:,:).^2);
         STCH.SetkMaxRad(max(kRad(:)));
    end
 

@@ -2,10 +2,13 @@
 % 
 %=========================================================
 
-function [default] = WrtMeth_ReconOnly_v2a_Default2(SCRPTPATHS)
+function [default] = WrtMeth_SiemensYarnball_v2a_Default2(SCRPTPATHS)
 
+wrparampath = [SCRPTPATHS.pioneerloc,'System Write',filesep,'Underlying',filesep,'zz Underlying',filesep,'WrtParam Functions',filesep];
 wrttrajorderpath = [SCRPTPATHS.pioneerloc,'System Write',filesep,'Underlying',filesep,'zz Underlying',filesep,'TrajOrder Functions',filesep];
+
 wrttrajorderfunc = 'TrajOrder_GoldenStep_v2a';
+wrparamfunc = 'WrtParam_SiemensYarnBall_v2a';
 
 m = 1;
 default{m,1}.entrytype = 'Input';
@@ -18,6 +21,13 @@ default{m,1}.labelstr = 'TrajOrderfunc';
 default{m,1}.entrystr = wrttrajorderfunc;
 default{m,1}.searchpath = wrttrajorderpath;
 default{m,1}.path = [wrttrajorderpath,wrttrajorderfunc];
+
+m = m+1;
+default{m,1}.entrytype = 'ScrptFunc';
+default{m,1}.labelstr = 'WrtParamfunc';
+default{m,1}.entrystr = wrparamfunc;
+default{m,1}.searchpath = wrparampath;
+default{m,1}.path = [wrparampath,wrparamfunc];
 
 m = m+1;
 default{m,1}.entrytype = 'RunExtFunc';

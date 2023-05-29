@@ -30,7 +30,12 @@ end
 function err = NameWaveform(WRTPARAM,WRTMETH,IMPMETH)
     err.flag = 0;
     KINFO = IMPMETH.KINFO(1);
-    SPIN = IMPMETH.DES.GENPRJ(1).SPIN;
+    for n = 1:2
+        SPIN = IMPMETH.DES.GENPRJ(n).SPIN;
+        if SPIN.AziSampFact ~= 0
+            break
+        end
+    end
     ind = strfind(IMPMETH.name,'ID');
     if isempty(ind)
         WRTPARAM.id = '';
@@ -72,7 +77,12 @@ function err = WriteParams(WRTPARAM,WRTMETH,IMPMETH)
 
     err.flag = 0;
     KINFO = IMPMETH.KINFO(1);
-    SPIN = IMPMETH.DES.GENPRJ(1).SPIN;
+    for n = 1:2
+        SPIN = IMPMETH.DES.GENPRJ(n).SPIN;
+        if SPIN.AziSampFact ~= 0
+            break
+        end
+    end
     TSMP = IMPMETH.TSMP;
     SYS = IMPMETH.SYS;
     GRAD = IMPMETH.GRAD;
@@ -121,6 +131,7 @@ function err = WriteParams(WRTPARAM,WRTMETH,IMPMETH)
     fprintf(WRTPARAM.fid,['os:',num2str(SYS.SysOverSamp,'%11.6g'),'\n']);
     fprintf(WRTPARAM.fid,['dwell:',num2str(TSMP.DwellProt*1000000,'%11.6g'),'\n']);
     fprintf(WRTPARAM.fid,['tgwfm:',num2str(GRAD.GetGradDuration*1000,'%11.6g'),'\n']);
+    fprintf(WRTPARAM.fid,['t2cen:',num2str(round(KINFO.SamplingTimeToCentre*100)*10,'%11.6g'),'\n']);
     fprintf(WRTPARAM.fid,['gmax:',num2str(GRAD.GetMaxAbsGrad,'%11.6g'),'\n']);
     fprintf(WRTPARAM.fid,['gpts:',num2str(GRAD.GetGradPts,'%11.6g'),'\n']);
     fprintf(WRTPARAM.fid,'####################################\n');

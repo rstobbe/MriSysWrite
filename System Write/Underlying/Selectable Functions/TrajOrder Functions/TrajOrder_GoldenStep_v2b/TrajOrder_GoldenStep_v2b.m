@@ -1,12 +1,13 @@
 %==================================================================
-% (v2a)
-%   
+% (vb)
+%   - Update constructor / initialization
+%   - Remove 'WRTMETH' from calling (not necessary)
 %==================================================================
 
-classdef TrajOrder_GoldenStep_v2a < handle
+classdef TrajOrder_GoldenStep_v2b < handle
 
 properties (SetAccess = private)                   
-    Method = 'TrajOrder_GoldenStep_v2a'
+    Method = 'TrajOrder_GoldenStep_v2b'
     ScnrImpProjArr
     ReconProjArr
     Panel = cell(0);
@@ -17,14 +18,20 @@ methods
 %==================================================================
 % Constructor
 %==================================================================  
-function [TORD,err] = TrajOrder_GoldenStep_v2a(TORDipt)    
+function TORD = TrajOrder_GoldenStep_v2b()    
+end
+
+%==================================================================
+% InitViaCompass
+%==================================================================  
+function [TORD,err] = InitViaCompass(TORD,TORDipt)    
     err.flag = 0;
 end
 
 %==================================================================
 % Order Trajectories
 %==================================================================  
-function err = OrderTrajectories(TORD,WRTMETH,IMP)
+function err = OrderTrajectories(TORD,IMP)
     err.flag = 0;
 
     %-----------------------------------------------

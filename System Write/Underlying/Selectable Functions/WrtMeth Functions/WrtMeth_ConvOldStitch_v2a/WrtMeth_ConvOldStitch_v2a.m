@@ -43,8 +43,16 @@ function err = Write(WRTMETH,PREV)
     WRTMETH.STCH{1}.SetNumCol(PREV.NumCol);
     WRTMETH.STCH{1}.SetSampStart(PREV.SampStart);
     WRTMETH.STCH{1}.SetSampEnd(PREV.SampEnd);
-    WRTMETH.STCH{1}.SetFov(PREV.Fov);
-    WRTMETH.STCH{1}.SetVox(PREV.Vox);  
+    if isfield(PREV,'Fov')
+        WRTMETH.STCH{1}.SetFov(PREV.Fov);
+    else
+        WRTMETH.STCH{1}.SetFov(round(1000/PREV.kStep));
+    end
+    if isfield(PREV,'Vox')
+        WRTMETH.STCH{1}.SetVox(PREV.Fov);
+    else
+        WRTMETH.STCH{1}.SetVox(1000/(2*PREV.kMaxRad));
+    end
     
     ReconInfoMat = zeros(size(PREV.ReconInfoMat),'single');
     ReconInfoMat(:,:,1) = PREV.ReconInfoMat(:,:,2);
@@ -64,6 +72,7 @@ function err = Write(WRTMETH,PREV)
     WRTMETH.PanelOutput = cat(1,cell2struct(WRTMETH.Panel,{'label','value','type'},2),PREV.PanelOutput);
     WRTMETH.ExpDisp = PanelStruct2Text(WRTMETH.PanelOutput);
 
+    PREV.name = strtok(PREV.name,'.mat');
     WRTMETH.name = PREV.name;
     if strcmp(WRTMETH.name(end),'X')
         WRTMETH.name = [WRTMETH.name,'2'];

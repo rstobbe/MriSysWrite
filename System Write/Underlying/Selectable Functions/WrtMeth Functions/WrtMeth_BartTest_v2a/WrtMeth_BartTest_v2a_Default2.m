@@ -2,7 +2,7 @@
 % 
 %=========================================================
 
-function [default] = WrtMeth_ReconOnly_v2a_Default2(SCRPTPATHS)
+function [default] = WrtMeth_BartTest_v2a_Default2(SCRPTPATHS)
 
 wrttrajorderpath = [SCRPTPATHS.pioneerloc,'System Write',filesep,'Underlying',filesep,'zz Underlying',filesep,'TrajOrder Functions',filesep];
 wrttrajorderfunc = 'TrajOrder_GoldenStep_v2a';

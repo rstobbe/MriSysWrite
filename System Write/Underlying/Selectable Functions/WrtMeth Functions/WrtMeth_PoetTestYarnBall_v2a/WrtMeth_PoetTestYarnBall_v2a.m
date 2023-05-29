@@ -7,13 +7,14 @@ classdef WrtMeth_PoetTestYarnBall_v2a < handle
 
 properties (SetAccess = private)                   
     Method = 'WrtMeth_PoetTestYarnBall_v2a'
+    TORD
     WRTGRAD
     WRTPARAM
-    Dummies
     TotalTrajNum
     Panel = cell(0)
     PanelOutput
     ExpDisp
+    SaveScript = 0
 end
 properties (SetAccess = public)    
     name
@@ -28,11 +29,13 @@ methods
 %==================================================================  
 function [WRTMETH,err] = WrtMeth_PoetTestYarnBall_v2a(WRTMETHipt)    
     err.flag = 0;
-    WRTMETH.Dummies = str2double(WRTMETHipt.('Dummies'));
     func = str2func('WrtGrad_Siemens_v2a');           
     WRTMETH.WRTGRAD = func(''); 
     func = str2func('WrtParam_SiemensYarnBall_v2a');           
-    WRTMETH.WRTPARAM = func('');   
+    WRTMETH.WRTPARAM = func('');
+    func = str2func('TrajOrder_GoldenStep_v2b');           
+    WRTMETH.TORD = func();
+    WRTMETH.TORD.InitViaCompass('');
 end 
 
 %==================================================================
@@ -40,15 +43,19 @@ end
 %================================================================== 
 function err = Write(WRTMETH,IMPMETH)
 
-    Grads = IMPMETH.GRAD.Grads;
+    %---------------------------------------------
+    % Order Trajectories
+    %---------------------------------------------
+    err = WRTMETH.TORD.OrderTrajectories(IMPMETH);
+    if err.flag
+        return
+    end 
+    Grads = IMPMETH.GRAD.Grads(WRTMETH.TORD.ScnrImpProjArr,:,:);
 
     %---------------------------------------------
-    % Add Dummies
+    % Use 30 Grads for Poet Test 
     %---------------------------------------------
-    if WRTMETH.Dummies > 0
-        GradDums = repmat(Grads(1,:,:),[WRTMETH.Dummies,1,1]);
-        Grads = cat(1,GradDums,Grads);
-    end    
+    Grads = Grads(1:30,:,:);
     WRTMETH.TotalTrajNum = length(Grads(:,1,1));
 
     %---------------------------------------------
